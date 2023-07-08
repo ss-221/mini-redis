@@ -14,3 +14,5 @@
 void PrintErrorMsg(const char* msg);
 
 int InitServer(int port);
+
+void ClientHandler(int clientSocket);

@@ -5,6 +5,35 @@ void PrintErrorMsg(const char* msg)
     printf("%s : %d\n", msg, errno);
 }
 
+void ClientHandler(int clientSocket)
+{
+    char msgBuffer[MAX_BUFFER_SIZE] = {0};
+
+        int readRetVal = 0;
+
+        while((readRetVal = read(clientSocket, msgBuffer, MAX_BUFFER_SIZE)) > 0)
+        {
+            if(msgBuffer[MAX_BUFFER_SIZE - 1] != 0)
+            {
+                printf("Message too long: %d\nWill exit\n", readRetVal);
+                strcpy(msgBuffer, EXIT_CODE);
+            }
+            else
+            {
+                msgBuffer[readRetVal] = 0;
+                printf("Message received: %s\n", msgBuffer);
+                fflush(stdout);
+            }
+
+            if(strcmp(msgBuffer, EXIT_CODE) == 0)
+            {
+                printf("EXIT received, closing the connection.\n");
+                return;
+            }
+        }
+
+}
+
 int InitServer(int port)
 {
     int socketID = socket(AF_INET, SOCK_STREAM, 0);
@@ -46,33 +75,7 @@ int InitServer(int port)
             PrintErrorMsg("Failed to accept the incoming request");
         }
 
-        char msgBuffer[MAX_BUFFER_SIZE] = {0};
-
-        int readRetVal = 0;
-
-        while((readRetVal = read(incomingSocket, msgBuffer, MAX_BUFFER_SIZE)) > 0)
-        {
-            if(msgBuffer[MAX_BUFFER_SIZE - 1] != 0)
-            {
-                printf("Message too long: %d\nWill exit\n", readRetVal);
-                strcpy(msgBuffer, EXIT_CODE);
-            }
-            else
-            {
-                msgBuffer[readRetVal] = 0;
-                printf("Message received: %s\n", msgBuffer);
-                fflush(stdout);
-            }
-
-            if(strcmp(msgBuffer, EXIT_CODE) == 0)
-            {
-                printf("EXIT received, closing the server.\n");
-                close(incomingSocket);
-                close(socketID);
-                return EXIT_SUCCESS;
-            }
-        }
-        
+        ClientHandler(incomingSocket);        
     }
 
     close(socketID);
