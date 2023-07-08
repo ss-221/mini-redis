@@ -16,4 +16,4 @@ void PrintErrorMsg(const char* msg);
 
 int InitClient(int port);
 
-#endif CLIENT_H
+#endif

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <pthread.h>
+#include <unistd.h>
 
 #define MAX_BACKLOG_QUEUE 5
 #define MAX_BUFFER_SIZE 4096
@@ -19,6 +20,6 @@ void PrintErrorMsg(const char* msg);
 
 int InitServer(int port);
 
-void ClientHandler(int clientSocket);
+void* ClientHandler(void* clientSocket);
 
-#endif SERVER_H
+#endif
