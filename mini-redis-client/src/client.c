@@ -38,10 +38,11 @@ int InitClient(int port)
         printf("Successfully connected to the server\n");
     }
 
-    char msgBuffer[MAX_BUFFER_SIZE] = {0};
+    char* msgBuffer = malloc(MAX_BUFFER_SIZE);
 
-    while(scanf("%s", msgBuffer))
+    while(fgets(msgBuffer, MAX_BUFFER_SIZE, stdin) > 0)
     {
+        msgBuffer[strcspn(msgBuffer, "\n")] = 0;
         if(send(socketID, msgBuffer, strlen(msgBuffer), 0) < 0)
         {
             printf("Failed to send");
@@ -50,6 +51,7 @@ int InitClient(int port)
         if(strcmp(msgBuffer, EXIT_CODE) == 0)
         {
             printf("Received EXIT.");
+            free(msgBuffer);
             break;
         }
     }
