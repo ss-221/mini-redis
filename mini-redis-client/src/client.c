@@ -42,7 +42,7 @@ int InitClient(int port)
 
     while(scanf("%s", msgBuffer))
     {
-        if(send(socketID, msgBuffer, MAX_BUFFER_SIZE, 0) < 0)
+        if(send(socketID, msgBuffer, strlen(msgBuffer), 0) < 0)
         {
             printf("Failed to send");
         }

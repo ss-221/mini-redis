@@ -50,15 +50,18 @@ int InitServer(int port)
 
         int readRetVal = 0;
 
-        while(readRetVal = read(incomingSocket, msgBuffer, MAX_BUFFER_SIZE))
+        while((readRetVal = read(incomingSocket, msgBuffer, MAX_BUFFER_SIZE)) > 0)
         {
-            if(readRetVal < 0)
+            if(msgBuffer[MAX_BUFFER_SIZE - 1] != 0)
             {
-                PrintErrorMsg("Failed to read the incoming message");
+                printf("Message too long: %d\nWill exit\n", readRetVal);
+                strcpy(msgBuffer, EXIT_CODE);
             }
             else
             {
+                msgBuffer[readRetVal] = 0;
                 printf("Message received: %s\n", msgBuffer);
+                fflush(stdout);
             }
 
             if(strcmp(msgBuffer, EXIT_CODE) == 0)
