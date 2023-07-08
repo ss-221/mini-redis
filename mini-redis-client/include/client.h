@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
@@ -12,3 +15,5 @@
 void PrintErrorMsg(const char* msg);
 
 int InitClient(int port);
+
+#endif CLIENT_H
